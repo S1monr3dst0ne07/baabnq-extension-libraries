@@ -1,0 +1,121 @@
+use 'libs/float.baabnq';
+
+
+sub Prob::ModuleInit;
+
+
+jump Prob::Skip;
+
+lab Prob::ModuleInit;
+    "ensure ctx
+    push 1; sub Floats::Value2Fp; pull _Floats::One;
+    put _Floats::Pi = 32073;
+
+    "precompute f for erf
+    push 4; sub Floats::Value2Fp;
+    push _Floats::Pi; sub Floats::Sqrt;
+    sub Floats::Div;
+    sub Floats::Neg;
+    pull _Prob::Erf::F;
+
+    "and cdf
+    push 4; sub Floats::Value2Fp;
+        push _Floats::Pi;
+        push 1; sub Floats::ShiftGreat;
+        sub Floats::Mul;
+        sub Floats::Sqrt;
+    sub Floats::Div;
+    sub Floats::Neg;
+    pull _Prob::CDF::F;
+
+
+
+    "config
+    put _Prob::SumLimit = 1000;
+
+    return;
+
+
+"(x::Float) => (s::Float)
+"x = e^s
+lab Prob::Exp;
+    sub Stack::Swap; pull _fpX;
+    put _fpSum = _Floats::Zero;
+    put _fpNumer = _Floats::One;
+    put _fpDener = _Floats::One;
+
+    put _i = 0;
+    lab Prob::Exp::Loop;
+        push _fpNumer;
+        push _fpDener;
+        sub Floats::Div;
+        push _fpSum;
+        sub Floats::Add;
+        pull _fpSum;
+
+        put _i = _i + 1;
+
+        push _fpNumer;
+        push _fpX;
+        sub Floats::Mul;
+        pull _fpNumer;
+
+        push _fpDener;
+        push _i; sub Floats::Value2Fp;
+        sub Floats::Mul;
+        pull _fpDener;
+
+    jump Prob::Exp::Loop ~ _i < _Prob::SumLimit;
+
+    push _fpSum;
+    sub Stack::Swap;
+    return;
+
+
+"(x::Float) => (l::Float)
+"l = erf(x)
+lab Prob::Erf;
+    sub Stack::Swap;                    "x
+
+    push _Prob::Erf::F;
+    sub Floats::Mul;                    "-x*f
+
+    sub Exp;                            "exp(-x*f)
+
+    push _Floats::One; sub Floats::Add; "exp(-x*f)
+    push _Floats::One; sub Stack::Swap;
+    sub Floats::Div;                    "1/(1+exp(-x*f))
+    push 2; sub Floats::ShiftGreat;     "2/(1+exp(-x*f))
+    push _Floats::One; sub Floats::Sub; "erf(x)
+
+    sub Stack::Swap;
+    return;
+
+
+
+"(x::Float) => (::Float)
+"Φ(x)
+lab Prob::CDF;
+lab Prob::CumulativeDistrubtionFunction;
+lab Prob::CumDistFunc;
+    sub Stack::Swap;                    "x
+
+    push _Prob::CDF::F;
+    sub Floats::Mul;                    "-x*f
+
+    sub Prob::Exp;                      "exp(-x*f)
+
+    push _Floats::One; sub Floats::Add; "1+exp(-x*f)
+    push _Floats::One; sub Stack::Swap;
+    sub Floats::Div;                    "1/(1+exp(-x*f))
+
+    sub Stack::Swap;
+    return;
+
+
+
+    
+
+
+lab Prob::Skip;
+    
