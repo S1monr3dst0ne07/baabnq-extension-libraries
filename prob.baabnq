@@ -114,6 +114,25 @@ lab Prob::CumDistFunc;
 
 
 
+"(x::Float, μ::Float, σ::Float) => (::Float)
+lab Prob::GND;
+lab Prob::GenericNormalDistribution;
+lab Prob::GenNormalDist;
+    sub Stack::Swap; pull _sigma;
+    sub Stack::swap; pull _mu;
+    sub Stack::swap; pull _x;
+
+    push _x;
+    push _mu; sub Floats::Neg;
+    sub Floats::Add;
+    push _sigma;
+    sub Floats::Div;
+
+    sub Prob::CDF;
+
+    sub Stack::Swap;
+    return;
+
     
 
 
