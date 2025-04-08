@@ -80,13 +80,14 @@ lab Prob::Erf;
     push _Prob::Erf::F;
     sub Floats::Mul;                    "-x*f
 
-    sub Exp;                            "exp(-x*f)
+    sub Prob::Exp;                      "exp(-x*f)
 
     push _Floats::One; sub Floats::Add; "exp(-x*f)
     push _Floats::One; sub Stack::Swap;
     sub Floats::Div;                    "1/(1+exp(-x*f))
     push 2; sub Floats::ShiftGreat;     "2/(1+exp(-x*f))
-    push _Floats::One; sub Floats::Sub; "erf(x)
+    push _Floats::One; sub Floats::Neg; 
+    sub Floats::Add;                    "erf(x)
 
     sub Stack::Swap;
     return;
@@ -119,8 +120,8 @@ lab Prob::GND;
 lab Prob::GenericNormalDistribution;
 lab Prob::GenNormalDist;
     sub Stack::Swap; pull _sigma;
-    sub Stack::swap; pull _mu;
-    sub Stack::swap; pull _x;
+    sub Stack::Swap; pull _mu;
+    sub Stack::Swap; pull _x;
 
     push _x;
     push _mu; sub Floats::Neg;
