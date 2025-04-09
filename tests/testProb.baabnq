@@ -1,0 +1,23 @@
+
+use 'libs/tests/common.baabnq';
+
+use 'ext/prob.baabnq';
+
+
+lab Local::TestProb::Init;
+    sub Floats::ModuleInit;
+    sub Prob::ModuleInit;
+return;
+
+
+lab TestProb::ModuleInit;
+    sub Local::TestProb::Init;
+
+    push _Floats::One;
+    sub Floats::Fp2Value;
+    pull __;
+    jump fail ~ __ != 1;
+
+    jump fail ~ _Floats::Pi != 32073;
+
+    jump succ;
