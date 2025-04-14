@@ -31,7 +31,7 @@ lab Prob::ModuleInit;
 
 
     "config
-    put _Prob::SumLimit = 1000;
+    put _Prob::SumLimit = 35;
 
     return;
 
