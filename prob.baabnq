@@ -1,4 +1,6 @@
+use 'libs/stack.baabnq';
 use 'libs/float.baabnq';
+use 'libs/no.baabnq';
 
 
 sub Prob::ModuleInit;
@@ -31,13 +33,13 @@ lab Prob::ModuleInit;
 
 
     "config
-    put _Prob::SumLimit = 35;
+    put _Prob::SumLimit = 30;
 
     return;
 
 
-"(x::Float) => (s::Float)
-"x = e^s
+"(s::Float) => (x::Float)
+"s = e^x
 lab Prob::Exp;
     sub Stack::Swap; pull _fpX;
     put _fpSum = _Floats::Zero;
@@ -49,9 +51,16 @@ lab Prob::Exp;
         push _fpNumer;
         push _fpDener;
         sub Floats::Div;
+
         push _fpSum;
         sub Floats::Add;
         pull _fpSum;
+
+        "edge case for x = 0 
+        push _Floats::One;
+            sub No::Return ~ _fpX == _Floats::Zero;
+        pull __;
+
 
         put _i = _i + 1;
 
