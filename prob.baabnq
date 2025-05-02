@@ -33,7 +33,7 @@ lab Prob::ModuleInit;
 
 
     "config
-    put _Prob::SumLimit = 30;
+    put _Prob::SumLimit = 10;
 
     return;
 
@@ -58,7 +58,9 @@ lab Prob::Exp;
 
         "edge case for x = 0 
         push _Floats::One;
+        sub Stack::Swap;
             sub No::Return ~ _fpX == _Floats::Zero;
+        sub Stack::Swap;
         pull __;
 
 
