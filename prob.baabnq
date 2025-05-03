@@ -130,7 +130,7 @@ lab Prob::Erf;
     push _Floats::One; sub Floats::Add; "exp(-x*f)
     push _Floats::One; sub Stack::Swap;
     sub Floats::Div;                    "1/(1+exp(-x*f))
-    push 2; sub Floats::ShiftGreat;     "2/(1+exp(-x*f))
+    push 1; sub Floats::ShiftGreat;     "2/(1+exp(-x*f))
     push _Floats::One; sub Floats::Neg; 
     sub Floats::Add;                    "erf(x)
 
