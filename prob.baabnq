@@ -39,15 +39,15 @@ lab Prob::ModuleInit;
 
 
 "(s::Float) => (x::Float)
-"s = e^x
-lab Prob::Exp;
+"∀x>0, s = e^x
+lab Prob::ExpPos;
     sub Stack::Swap; pull _fpX;
     put _fpSum = _Floats::Zero;
     put _fpNumer = _Floats::One;
     put _fpDener = _Floats::One;
 
     put _i = 0;
-    lab Prob::Exp::Loop;
+    lab Prob::ExpPos::Loop;
         push _fpNumer;
         push _fpDener;
         sub Floats::Div;
@@ -57,11 +57,11 @@ lab Prob::Exp;
         pull _fpSum;
 
         "edge case for x = 0 
-        push _Floats::One;
-        sub Stack::Swap;
-            sub No::Return ~ _fpX == _Floats::Zero;
-        sub Stack::Swap;
-        pull __;
+        "push _Floats::One;
+        "sub Stack::Swap;
+        "    sub No::Return ~ _fpX == _Floats::Zero;
+        "sub Stack::Swap;
+        "pull __;
 
 
         put _i = _i + 1;
@@ -76,11 +76,53 @@ lab Prob::Exp;
         sub Floats::Mul;
         pull _fpDener;
 
-    jump Prob::Exp::Loop ~ _i < _Prob::SumLimit;
+    jump Prob::ExpPos::Loop ~ _i < _Prob::SumLimit;
 
     push _fpSum;
     sub Stack::Swap;
     return;
+
+"(s::Float) => (x::Float)
+"∀x, s = e^x
+lab Prob::Exp;
+    sub Stack::Swap;
+
+    sub Stack::Dup; pull _fpX;
+
+    jump Prob::Exp::Zero ~ _fpX == _Floats::Zero;
+    jump Prob::Exp::Zero ~ _fpX == _Floats::Zero | _SIGN_MASK;
+    jump Prob::Exp::Neg  ~ _fpX & _SIGN_MASK != 0;
+
+    sub Prob::ExpPos;
+    sub Stack::Swap;
+    return;
+
+    lab Prob::Exp::Zero;
+        sub Stack::Drop;
+
+        "e^0 = 1
+        push _Floats::One;
+        sub Stack::Swap;
+        return;
+
+    lab Prob::Exp::Neg;
+        "-x
+        sub Floats::Neg;
+
+        "e^{-x}
+        sub Prob::ExpPos;
+
+        "\frac{1}{e^{-x}} = e^x
+        push _Floats::One;
+        sub Stack::Swap;
+        sub Floats::Div;
+
+        sub Stack::Swap;
+        return;
+    
+
+
+    
 
 
 "(x::Float) => (l::Float)
