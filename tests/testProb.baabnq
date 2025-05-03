@@ -21,3 +21,40 @@ lab TestProb::ModuleInit;
     jump fail ~ _Floats::Pi != 32073;
 
     jump succ;
+
+
+lab TestProb::Exp::ImproperIntegrate;
+    sub Local::TestProb::Init;
+
+    put _index = 0;
+    put _fpInte = _Floats::Zero;
+
+    put _dx = 31436; "~ 0.1
+    put _limit = 100; "100 samples
+
+    lab loop;
+        push _index; sub Floats::Value2Fp;
+        push _dx;
+        sub Floats::Mul;
+        sub Floats::Neg;
+
+        sub Prob::Exp;
+
+        push _dx;
+        sub Floats::Mul;
+
+        push _fpInte;
+        sub Floats::Add;
+        pull _fpInte;
+
+        put _index = _index + 1;
+    jump loop ~ _index < _limit;
+
+    push _fpInte;
+    push 31859; "~ 0.95
+    sub Floats::Cmp;
+    pull __;
+    jump fail ~ __ == 0;
+
+    jump succ;
+    

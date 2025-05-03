@@ -56,14 +56,6 @@ lab Prob::ExpPos;
         sub Floats::Add;
         pull _fpSum;
 
-        "edge case for x = 0 
-        "push _Floats::One;
-        "sub Stack::Swap;
-        "    sub No::Return ~ _fpX == _Floats::Zero;
-        "sub Stack::Swap;
-        "pull __;
-
-
         put _i = _i + 1;
 
         push _fpNumer;
