@@ -57,3 +57,55 @@ lab TestProb::Exp::ImproperIntegrate;
     jump fail ~ __ == 0;
 
     jump succ;
+
+
+lab TestProb::Erf;
+    sub Local::TestProb::Init;
+
+    "let test function t(a) = a - \int_0^a erf(x) dx
+    "then, as a -> infty, t(a) -> 1/2 ln(2) sqrt(pi)
+    put _dx = 31139; "~0.02
+    put _limit = 100; "100 samples
+
+    put _index = 0;
+    put _fpInte = _Floats::Zero;
+    lab Local::TestProb::Erf;
+        push _index;
+        sub Floats::Value2Fp;
+
+        push _dx; sub Floats::Mul;
+        sub Prob::Erf;
+        push _dx; sub Floats::Mul;
+
+        push _fpInte;
+        sub Floats::Add;
+        pull _fpInte;
+
+        put _index = _index + 1;
+    jump Local::TestProb::Erf ~ _index < _limit;
+
+    "a
+    push _dx;
+    push _limit; sub Floats::Value2Fp;
+    sub Floats::Mul;
+
+    "-\int_0^a erf(x) dx
+    push _fpInte;
+    sub Floats::Neg;
+
+    sub Floats::Add;
+
+    push 64541; "~ -1/2 ln(2) sqrt(pi)
+    sub Floats::Add;
+
+    "abs
+    sub Floats::SetSign;
+    sub Floats::Neg;
+
+    push 31564;
+    sub Stack::Swap;
+    sub Floats::Cmp;
+    pull __;
+    jump fail ~ __ == 0;
+
+    jump succ;
