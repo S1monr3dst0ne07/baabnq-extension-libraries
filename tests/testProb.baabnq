@@ -32,7 +32,7 @@ lab TestProb::Exp::ImproperIntegrate;
     put _dx = 31436; "~ 0.1
     put _limit = 100; "100 samples
 
-    lab loop;
+    lab Local::TestProb::Exp::ImproperIntegrate;
         push _index; sub Floats::Value2Fp;
         push _dx;
         sub Floats::Mul;
@@ -48,7 +48,7 @@ lab TestProb::Exp::ImproperIntegrate;
         pull _fpInte;
 
         put _index = _index + 1;
-    jump loop ~ _index < _limit;
+    jump Local::TestProb::Exp::ImproperIntegrate ~ _index < _limit;
 
     push _fpInte;
     push 31859; "~ 0.95
@@ -57,4 +57,3 @@ lab TestProb::Exp::ImproperIntegrate;
     jump fail ~ __ == 0;
 
     jump succ;
-    
